@@ -8,8 +8,8 @@ CORS(app)
 
 # Load model and scalers
 model = pickle.load(open("model.pkl", "rb"))
-ms = pickle.load(open("minmax_scaler.pkl", "rb"))
-sc = pickle.load(open("standard_scaler.pkl", "rb"))
+ms = pickle.load(open("minmaxscaler.pkl", "rb"))
+sc = pickle.load(open("standardscaler.pkl", "rb"))
 
 @app.route("/")
 def index():
