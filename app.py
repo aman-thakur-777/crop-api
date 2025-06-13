@@ -6,10 +6,8 @@ import pickle
 app = Flask(__name__)
 CORS(app)
 
-# Load model and scalers
+# Load only the model
 model = pickle.load(open("model.pkl", "rb"))
-ms = pickle.load(open("minmaxscaler.pkl", "rb"))
-sc = pickle.load(open("standscaler.pkl", "rb"))
 
 @app.route("/")
 def index():
@@ -29,9 +27,7 @@ def predict():
         rainfall = float(data['rainfall'])
 
         input_data = np.array([[N, P, K, temp, humidity, ph, rainfall]])
-        scaled = ms.transform(input_data)
-        final = sc.transform(scaled)
-        pred = model.predict(final)
+        pred = model.predict(input_data)
 
         crop_dict = {
             1: "Rice", 2: "Maize", 3: "Jute", 4: "Cotton", 5: "Coconut", 6: "Papaya", 7: "Orange",
@@ -42,5 +38,6 @@ def predict():
 
         crop = crop_dict.get(pred[0], "Unknown Crop")
         return jsonify({"crop": crop})
+
     except Exception as e:
         return jsonify({"error": str(e)}), 400
